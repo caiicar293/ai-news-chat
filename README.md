@@ -36,7 +36,7 @@ Flask backend · plain-JavaScript frontend · Google Gemini · NewsAPI ·
 Requires **Python 3.10+** (the code uses `str | None` annotations).
 
 ```bash
-git clone <your-repository-url>
+git clone <https://github.com/caiicar293/ai-news-chat>
 cd "AI news"
 
 python -m venv .venv
