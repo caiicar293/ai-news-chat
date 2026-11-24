@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <title>News Chat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  </head>
+  <body>
+    <div class="app" id="app">
+      <!-- Chat history sidebar -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-head">
+          <span class="brand"><span class="brand-mark">N</span> News Chat</span>
+          <button
+            class="icon-btn sidebar-close"
+            id="sidebar-close"
+            type="button"
+            aria-label="Close sidebar"
+          >
+            &times;
+          </button>
+        </div>
+
+        <button class="new-chat-btn" id="new-chat-btn" type="button">
+          <span class="plus">+</span> New chat
+        </button>
+
+        <div class="chat-list" id="chat-list" aria-label="Chat history"></div>
+
+        <div class="sidebar-foot">
+          <span class="status-dot" id="status-dot"></span>
+          <span id="status-text">Connecting&hellip;</span>
+        </div>
+      </aside>
+
+      <div class="scrim" id="scrim" hidden></div>
+
+      <!-- Conversation column -->
+      <main class="main">
+        <header class="topbar">
+          <button class="icon-btn menu-btn" id="menu-btn" type="button" aria-label="Open sidebar">
+            &#9776;
+          </button>
+
+          <div class="title-wrap">
+            <h1 id="chat-title">News Chat</h1>
+            <p id="chat-subtitle">Ask Gemini about today's headlines</p>
+          </div>
+
+          <div class="topbar-actions">
+            <div class="model-switch">
+              <label class="model-label" for="model-select">Model</label>
+              <select id="model-select" aria-label="Gemini model"></select>
+              <input
+                id="model-custom"
+                class="model-custom hidden"
+                type="text"
+                placeholder="model id"
+                spellcheck="false"
+                aria-label="Custom model id"
+              />
+            </div>
+
+            <button
+              class="ghost-btn"
+              id="articles-btn"
+              type="button"
+              title="Fetch today's headlines for a topic"
+            >
+              <span id="articles-btn-label">Get news</span>
+              <span class="pill hidden" id="article-count">0</span>
+            </button>
+          </div>
+        </header>
+
+        <div class="banner hidden" id="banner"></div>
+
+        <section class="messages" id="messages" aria-live="polite"></section>
+
+        <form class="composer" id="composer" autocomplete="off">
+          <div class="composer-box">
+            <textarea
+              id="input"
+              rows="1"
+              placeholder="Ask anything&hellip;"
+              disabled
+            ></textarea>
+            <button class="send-btn" id="send-btn" type="submit" disabled>Send</button>
+          </div>
+          <p class="composer-hint">
+            Enter to send &middot; Shift+Enter for a new line &middot; answers may be wrong, check the article
+          </p>
+        </form>
+      </main>
+
+      <!-- Article reader -->
+      <aside class="reader" id="reader" hidden aria-label="Article reader">
+        <header class="reader-head">
+          <button class="icon-btn hidden" id="reader-back" type="button" aria-label="Back to article list">
+            &#8592;
+          </button>
+          <h2 id="reader-title">Articles</h2>
+          <button class="icon-btn" id="reader-close" type="button" aria-label="Close reader">
+            &times;
+          </button>
+        </header>
+        <div class="reader-scroll" id="reader-body"></div>
+      </aside>
+    </div>
+
+    <!-- Get news dialog: loads headlines into the current chat -->
+    <dialog class="dialog" id="news-dialog">
+      <form id="news-form" method="dialog">
+        <h2>Get today's news</h2>
+        <p class="dialog-sub">
+          Pull today's headlines for a topic. The assistant can then look them up,
+          and you can read any of them yourself. Chatting works without this.
+        </p>
+
+        <label class="field">
+          <span>Topic</span>
+          <input
+            id="news-topic"
+            type="text"
+            maxlength="80"
+            placeholder="e.g. Apple"
+            required
+          />
+        </label>
+
+        <label class="field">
+          <span>Headlines to fetch</span>
+          <input id="news-page-size" type="number" min="1" max="100" value="20" required />
+        </label>
+
+        <p class="dialog-error hidden" id="news-error"></p>
+
+        <div class="dialog-actions">
+          <button class="ghost-btn" id="news-cancel" type="button">Cancel</button>
+          <button class="primary-btn" id="news-submit" type="submit">Fetch headlines</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+  </body>
+</html>
